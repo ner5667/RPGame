@@ -23,6 +23,7 @@ end
 
 function Graphics:render_entities()
     Player:draw()
+    Coin:draw()
     love.graphics.draw(scoring_display, 0, 0)
 end
 

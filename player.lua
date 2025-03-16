@@ -5,16 +5,24 @@ Player = {}
 function Player:load()
     self.x_position = 50
     self.y_postion = 50
-    self.sprite = love.graphics.newImage("assets/Aseprite/Player_sprite_1.png")
+    self.sprites = {}
+    for i = 1, 1, 1 do
+        self.sprites[i] = love.graphics.newImage("assets/Player/Player_sprite_" .. tostring(i) .. ".png")
+    end
+    self.current_animation = 1
+    self.sprite = self.sprites[self.current_animation] 
+
     self.width = self.sprite:getHeight()
     self.height = self.sprite:getHeight()
     self.speed = 120
-    self.score = 12
+    self.score = 0
 end
 
 function Player:update(dt)
     self:move(dt)
     self:check_out_of_bounds()
+    --TODO this should only change when player char changes animation and not every frame
+    self.sprite = self.sprites[self.current_animation]
 end
 
 

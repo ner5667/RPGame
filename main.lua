@@ -1,5 +1,6 @@
 require("player")
 require("graphics")
+require("coin")
 
 
 function love.load()
@@ -13,6 +14,7 @@ function love.load()
 
     --initialize Player (TODO: do it for all entities in one function)
     Player:load()
+    Coin:load()
 
 
     scoring_display = love.graphics.newText(love.graphics.setNewFont(11), Player.score)
@@ -20,6 +22,7 @@ end
 
 function love.update(dt)
     Player:update(dt)
+    Coin:update(dt)
     scoring_display:set(Player.score)
 end
 
@@ -35,4 +38,15 @@ function love.draw()
 end
 
 
+function check_collision(a, b)
+    if a.x_position + a.width > b.x_position and 
+        a.x_position < b.width + b.x_position and
+        a.y_postion + a.height > b.y_postion and
+        a.y_postion < b.height + b.y_postion 
+    then
+        return true
+    else
+        return false
+    end
+end
 
