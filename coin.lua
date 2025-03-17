@@ -6,22 +6,25 @@ Coin = {}
 
 function Coin:load()
     self.x_position = 40
-    self.y_postion = 280
+    self.y_position = 12
     self.collection_score = 1
-    self.sprite = love.graphics.newImage("assets/Coin/sprite.png", normal)
+    self.sprite = love.graphics.newImage("assets/Coin/sprite.png")
     self.width = self.sprite:getWidth()
     self.height = self.sprite:getHeight()
-    print(self.sprite)
 end
 
 function Coin:update(dt)
-    if check_collision(self, Player) then
-        print("Collected")
-    end
-    
+
 end
 
 function Coin:draw()
-    love.graphics.draw(self.sprite, self.x_position, self.y_postion)
+    love.graphics.draw(self.sprite, self.x_position, self.y_position)
+end
+
+
+function Coin:on_collect(entity)
+    entity.score = entity.score + self.collection_score
+    self.y_position = math.random(0, SCREEN_HEIGHT - self.height)
+    self.x_position = math.random(0, SCREEN_WIDTH - self.width)
 end
 

@@ -33,7 +33,7 @@ function love.draw()
 
     Graphics:render_canvas()
 
-    local r, g, b = love.math.colorFromBytes(86, 179, 192)
+    local r, g, b = love.math.colorFromBytes(201, 226, 158)
     love.graphics.setBackgroundColor(r, g, b)
 end
 
@@ -41,8 +41,8 @@ end
 function check_collision(a, b)
     if a.x_position + a.width > b.x_position and 
         a.x_position < b.width + b.x_position and
-        a.y_postion + a.height > b.y_postion and
-        a.y_postion < b.height + b.y_postion 
+        a.y_position + a.height > b.y_position and
+        a.y_position < b.height + b.y_position 
     then
         return true
     else
