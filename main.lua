@@ -2,19 +2,28 @@ require("player")
 require("graphics")
 require("coin")
 
+-- initialize Globals
+PIXEL_SIZE = 5.0
+
 
 function love.load()
-    -- initialize Globals
-    PIXEL_SIZE = 5.0
-    SCREEN_WIDTH = love.graphics.getWidth() / PIXEL_SIZE
-    SCREEN_HEIGHT = love.graphics.getHeight() / PIXEL_SIZE
+    SCREEN_WIDTH = love.graphics.getWidth()
+    SCREEN_HEIGHT = love.graphics.getHeight()
 
     --initialize graphics
     Graphics:load_canvas()
 
-    --initialize Player (TODO: do it for all entities in one function)
     Player:load()
     Coin:load()
+
+    Graphics:load_background()
+
+    background_grass_images = {}
+    for i = 1, 3, 1 do 
+        background_grass_images[i] = love.graphics.newImage("assets/Background/Grass_" .. tostring(i) .. ".png")
+    end
+
+    test_batch = love.graphics.newSpriteBatch(background_grass_images[1], 12)
 
 
     scoring_display = love.graphics.newText(love.graphics.setNewFont(11), Player.score)
@@ -27,14 +36,17 @@ function love.update(dt)
 end
 
 function love.draw()
-    Graphics:setup_canvas()
 
+
+    Graphics:draw_background()
     Graphics:render_entities()
 
-    Graphics:render_canvas()
+    Player:draw()
+
 
     local r, g, b = love.math.colorFromBytes(201, 226, 158)
     love.graphics.setBackgroundColor(r, g, b)
+
 end
 
 
