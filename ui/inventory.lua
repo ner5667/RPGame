@@ -6,7 +6,7 @@ function Inventory:load()
     self.height = self.sprite:getHeight()
     self.width = self.sprite:getWidth()
     self.x_position = (SCREEN_WIDTH - self.width) / 2
-    self.y_position = 0
+    self.y_position = Hotbar.y_position + Hotbar.height - self.height
 end
 
 

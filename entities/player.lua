@@ -4,11 +4,14 @@ Player = Entity.new(0, 0, nil)
 
 function Player:load()
     self.sprites = {}
-    for i = 1, 8, 1 do
+    for i = 1, 4, 1 do
         self.sprites[i] = love.graphics.newImage("assets/Player/Player_sprite_" .. tostring(i) .. ".png")
     end
     self.current_animation = 1
-    self.sprite = self.sprites[self.current_animation] 
+    self.sprite = self.sprites[self.current_animation]
+
+    self.max_health = 3
+    self.current_health = self.max_health
 
     self.movement_vector = {}
     self.movement_vector.vertical = 0

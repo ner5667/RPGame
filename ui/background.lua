@@ -1,13 +1,12 @@
+Background = {}
 
-Graphics = {}
-local background_images = {}
-local spriteBatch
+Background.background_images = {}
 
 
-function Graphics:load_background()
+function Background:load_background()
     local GRASS_SIZE = 32
-    local image = love.graphics.newImage("assets/Background/Grass_batch.png")
-    spriteBatch = love.graphics.newSpriteBatch(image)
+    local image = love.graphics.newImage("assets/Background/Grass_batch.png") --TODO do everything in a tile_map
+    self.sprite_batch = love.graphics.newSpriteBatch(image)
 
     local quad_table = {}
 
@@ -22,8 +21,8 @@ function Graphics:load_background()
     for x = 0, love.graphics.getWidth(), GRASS_SIZE do
         for y = 0, love.graphics.getHeight(), GRASS_SIZE do
             local quad = quad_table[math.random(#quad_table)].grass_quad
-            
-                table.insert(background_images, {
+
+                table.insert(self.background_images, {
                     quad = quad,
                     x = x,
                     y = y,
@@ -33,24 +32,11 @@ function Graphics:load_background()
 end
 
 
-
-function Graphics:render_entities()
-    Player:draw()
-    Coin:draw()
-
-    --TODO make a real UI
-    
-end
-
-function Graphics:draw_background()
-    spriteBatch:clear()
-    for _, entity in ipairs(background_images) do
-        spriteBatch:add(entity.quad, entity.x, entity.y)
+function Background:draw_background()
+    self.sprite_batch:clear()
+    for _, entity in ipairs(self.background_images) do
+        self.sprite_batch:add(entity.quad, entity.x, entity.y)
     end
-    love.graphics.draw(spriteBatch)
-
+    love.graphics.draw(self.sprite_batch)
 end
-
-
-
 
