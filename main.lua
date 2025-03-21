@@ -1,52 +1,47 @@
-require("player")
-require("graphics")
-require("coin")
+require("entities/entities")
+require("entities/player")
+require("entities/coin")
+require("ui/inventory")
+require("ui/ui")
+require("ui/hotbar")
+require("ui/graphics")
+
+
 
 -- initialize Globals
-PIXEL_SIZE = 5.0
+inventory_out = false --TODO this is horrendous for wanting to expand on overlays but works for now
+
 
 
 function love.load()
     SCREEN_WIDTH = love.graphics.getWidth()
     SCREEN_HEIGHT = love.graphics.getHeight()
 
-    --initialize graphics
-    Graphics:load_canvas()
 
-    Player:load()
-    Coin:load()
+    Entities:load()
+
+    Inventory:load()
+    Hotbar:load()
+    Overlay:push(Hotbar)
 
     Graphics:load_background()
-
-    background_grass_images = {}
-    for i = 1, 3, 1 do 
-        background_grass_images[i] = love.graphics.newImage("assets/Background/Grass_" .. tostring(i) .. ".png")
-    end
-
-    test_batch = love.graphics.newSpriteBatch(background_grass_images[1], 12)
 
 
     scoring_display = love.graphics.newText(love.graphics.setNewFont(11), Player.score)
 end
 
 function love.update(dt)
-    Player:update(dt)
-    Coin:update(dt)
-    scoring_display:set(Player.score)
+    Entities:update(dt)
+    Overlay.update()
+    scoring_display:set(Player.score) --update, do this in Player
 end
 
 function love.draw()
-
-
     Graphics:draw_background()
-    Graphics:render_entities()
 
-    Player:draw()
+    Entities:draw()
 
-
-    local r, g, b = love.math.colorFromBytes(201, 226, 158)
-    love.graphics.setBackgroundColor(r, g, b)
-
+    Overlay:draw() -- TODO here score
 end
 
 
@@ -62,3 +57,18 @@ function check_collision(a, b)
     end
 end
 
+
+function love.keypressed(key) 
+    if key == "c" then -- debug
+        Player.score = Player.score + 1
+    end
+    if key == "e" then
+        if not inventory_out then
+            Overlay:push(Inventory)
+            inventory_out = true
+        elseif inventory_out then
+            Overlay:pop()
+            inventory_out = false
+        end
+    end
+end

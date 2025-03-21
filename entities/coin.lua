@@ -3,27 +3,15 @@ require("os")
 
 math.randomseed(os.time())
 
-Coin = {}
 
+
+Coin = Entity.new(0, 0, love.graphics.newImage("assets/Coin/coin.png"))
 
 function Coin:load()
-    self.x_position = 0
-    self.y_position = 0
     self.collection_score = 1
-    self.sprite = love.graphics.newImage("assets/Coin/coin.png")
-    self.width = self.sprite:getWidth()
-    self.height = self.sprite:getHeight()
 
     --instantly get a new spawn point
     Coin:on_collect(nil)
-end
-
-function Coin:update(dt)
-
-end
-
-function Coin:draw()
-    love.graphics.draw(self.sprite, self.x_position, self.y_position)
 end
 
 

@@ -1,10 +1,8 @@
 
 
-Player = {}
+Player = Entity.new(0, 0, nil)
 
 function Player:load()
-    self.x_position = 0
-    self.y_position = 0
     self.sprites = {}
     for i = 1, 8, 1 do
         self.sprites[i] = love.graphics.newImage("assets/Player/Player_sprite_" .. tostring(i) .. ".png")
@@ -18,7 +16,7 @@ function Player:load()
 
     self.width = self.sprite:getWidth()
     self.height = self.sprite:getHeight()
-    self.speed = 450
+    self.base_speed = 450
     self.score = 0
 end
 
@@ -28,12 +26,6 @@ function Player:update(dt)
     if check_collision(self, Coin) then
         Coin:on_collect(self)
     end
-    self.score = love.timer.getFPS()
-end
-
-
-function Player:draw()
-    love.graphics.draw(self.sprite, self.x_position, self.y_position)
 end
 
 function Player:check_out_of_bounds()
@@ -43,12 +35,18 @@ function Player:check_out_of_bounds()
     if self.x_position > love.graphics.getWidth() - self.width then
         self.x_position = love.graphics.getWidth() - self.width
     end
+    if self.y_position > love.graphics.getHeight() - self.height then
+        self.y_position = love.graphics.getHeight() - self.height
+    end
+    if self.y_position < 0 then
+        self.y_position = 0
+    end
 end
 
 
 
 function Player:move(dt)
-    local adjusted_speed = self.speed
+    local adjusted_speed = self.base_speed
 
     if love.keyboard.isDown("a") then
         self.movement_vector.horizontal = -1
@@ -66,11 +64,9 @@ function Player:move(dt)
         self.movement_vector.vertical = 1
         self.current_animation = 1
     end
-    if love.keyboard.isDown("c") then
-        print(Coin.x_position, Coin.y_position)
-    end
-    if love.keyboard.isDown("space") then
-        print(self.x_position, self.y_position)
+
+    if self.movement_vector.vertical and self.movement_vector.horizontal then
+        adjusted_speed = adjusted_speed / 1.4
     end
 
 
