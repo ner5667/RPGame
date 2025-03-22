@@ -2,29 +2,40 @@ Heart_display = {}
 
 
 function Heart_display:load()
-    local image = love.graphics.newImage("assets/ui/hearts/full_heart.png")
-    self.width, self.height = image:getDimensions()
-
-    self.current_hearts = Player.max_health
-
+    local image = love.graphics.newImage("assets/ui/hearts/hearts_container.png")
     self.sprite_batch = love.graphics.newSpriteBatch(image)
-    self.hearts_quad = {
-        heart_1 = love.graphics.newQuad(0, 0, self.height, self.width, image:getDimensions()),
-        heart_2 = love.graphics.newQuad(0, 0, self.height, self.width, image:getDimensions()),
-        heart_3 = love.graphics.newQuad(0, 0, self.height, self.width, image:getDimensions()),
-    }
 
+    local image_width = image:getWidth()
+    local image_height = image:getHeight()
 
-    self.x_position = SCREEN_WIDTH - (self.current_hearts * self.width)
+    self.full_heart_quad = love.graphics.newQuad(0, 0, image_width / 2, image_height, image:getDimensions())
+    self.empty_heart_quad = love.graphics.newQuad(image_width/2, 0, image_width / 2, image_height, image:getDimensions())
+
+    self.width, self.height = image:getDimensions()
+    self.width = self.width / 2 -- TODO Maybe do that a bit nicer?
+
+    self.max_hearts = Player.max_health
+    self.current_hearts = Player.current_health
+
+    self.x_position = SCREEN_WIDTH - self.width
     self.y_position = 0
+end
+
+function Heart_display:update()
+    self.max_hearts = Player.max_health
+    self.current_hearts = Player.current_health
 end
 
 function Heart_display:draw()
     self.sprite_batch:clear()
-    local counter = 0 -- this is horrendous programming
-    for i, heart in pairs(self.hearts_quad) do
-        self.sprite_batch:add(heart, self.x_position + counter * self.width, self.y_position)
-        counter = counter + 1
+    for counter = self.max_hearts-1, 0, -1 do
+        local heart_to_add
+        if self.current_hearts - counter >= 0 then
+            heart_to_add = self.full_heart_quad
+        else
+            heart_to_add = self.empty_heart_quad
+        end
+        self.sprite_batch:add(heart_to_add, self.x_position - counter * self.width, self.y_position)
     end
 
     love.graphics.draw(self.sprite_batch)

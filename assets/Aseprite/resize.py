@@ -6,7 +6,7 @@ import sys
 from PIL import Image
 import os
 
-UPSCALE_FACTOR = 2
+UPSCALE_FACTOR = 3
 
 
 def upscale_pixel_art(input_image, output_directory, input_image_path):
@@ -20,6 +20,14 @@ def upscale_pixel_art(input_image, output_directory, input_image_path):
     resized_image.save(output_image_path)
 
 if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        try:
+            UPSCALE_FACTOR = int(sys.argv[1])
+        except ValueError:
+            print("Please input an Integer")
+            sys.exit(-1)
+
+        
     png_files = [file_path for file_path in os.listdir() if file_path[len(file_path)-4:] == ".png"]
     for file_path in png_files:
         input_image = Image.open(file_path)

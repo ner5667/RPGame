@@ -1,7 +1,14 @@
+M = {}
 Inventory = {}
+
+local inventory_cursor = {
+    index = 1,
+    max = 2
+}
 
 function Inventory:load()
     self.contents = {}
+
     self.sprite = love.graphics.newImage("assets/ui/inventory/big_inventory.png")
     self.height = self.sprite:getHeight()
     self.width = self.sprite:getWidth()

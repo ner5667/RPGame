@@ -18,6 +18,7 @@ function M.load()
     Heart_display:load()
     Score_display:load()
     Overlay:push(Hotbar)
+    Overlay:push(Heart_display)
     Overlay:push(Score_display)
     
 
@@ -44,7 +45,7 @@ function M.keypressed(key)
     if key == "c" then -- debug
         Player.score = Player.score + 1
     end
-    if key == "e" then
+    if key == "i" then
         if not inventory_out then
             Overlay:push(Inventory)
             inventory_out = true
@@ -52,6 +53,19 @@ function M.keypressed(key)
             Overlay:pop()
             inventory_out = false
         end
+    end
+    --debug
+    if key == "up" then
+        Player.current_health = Player.current_health + 1
+    end
+    if key == "down" then
+        Player.current_health = Player.current_health - 1
+    end
+    if key == "left" then
+        Player.max_health = Player.max_health + 1
+    end
+    if key == "right" then
+        Player.max_health = Player.max_health - 1
     end
 end
 

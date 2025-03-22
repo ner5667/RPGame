@@ -4,13 +4,14 @@ Player = Entity.new(0, 0, nil)
 
 function Player:load()
     self.sprites = {}
+    --TODO implement playermap here + keep animations in mind (do a table of tables w different animations?)
     for i = 1, 4, 1 do
         self.sprites[i] = love.graphics.newImage("assets/Player/Player_sprite_" .. tostring(i) .. ".png")
     end
     self.current_animation = 1
     self.sprite = self.sprites[self.current_animation]
 
-    self.max_health = 3
+    self.max_health = 5
     self.current_health = self.max_health
 
     self.movement_vector = {}
