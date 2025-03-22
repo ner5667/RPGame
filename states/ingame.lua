@@ -35,8 +35,24 @@ function M.draw()
 
     Entities:draw()
 
-    Overlay:draw() -- TODO here score
+    Overlay:draw()
     Heart_display:draw()
+end
+
+
+function M.keypressed(key) 
+    if key == "c" then -- debug
+        Player.score = Player.score + 1
+    end
+    if key == "e" then
+        if not inventory_out then
+            Overlay:push(Inventory)
+            inventory_out = true
+        elseif inventory_out then
+            Overlay:pop()
+            inventory_out = false
+        end
+    end
 end
 
 
@@ -52,20 +68,5 @@ function check_collision(a, b)
     end
 end
 
-
-function love.keypressed(key) 
-    if key == "c" then -- debug
-        Player.score = Player.score + 1
-    end
-    if key == "e" then
-        if not inventory_out then
-            Overlay:push(Inventory)
-            inventory_out = true
-        elseif inventory_out then
-            Overlay:pop()
-            inventory_out = false
-        end
-    end
-end
 
 return M
