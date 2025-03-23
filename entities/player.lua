@@ -3,13 +3,33 @@
 Player = Entity.new(0, 0, nil)
 
 function Player:load()
-    self.sprites = {}
-    --TODO implement playermap here + keep animations in mind (do a table of tables w different animations?)
-    for i = 1, 4, 1 do
-        self.sprites[i] = love.graphics.newImage("assets/Player/Player_sprite_" .. tostring(i) .. ".png")
-    end
-    self.current_animation = 1
-    self.sprite = self.sprites[self.current_animation]
+
+    local reference_sprite = love.graphics.newImage("assets/Player/Player_sprite-1.png")
+    local reference_height, local reference_width = reference_sprite:getDimensions()
+
+
+    self.sprite = {
+        local image = love.graphics.newImage("assets/Player/Player_sprite")
+        sprite_batch = love.graphics.newSpriteBatch(image)
+        facing_forward = {}
+        facing_backward = {}
+        facing_right = {}
+        facing_left = {}
+
+        for y = 0, image:getHeight(), reference_height do
+            local quad_forward = love.graphics.newQuad(0, y, reference_sprite:getDimensions(), image:getDimensions())
+            local quad_backward = love.graphics.newQuad(reference_width, y, reference_sprite:getDimensions(), image:getDimensions())
+            local quad_right = love.graphics.newQuad(reference_width*2, y, reference_sprite:getDimensions(), image:getDimensions())
+            local quad_left = love.graphics.newQuad(reference_width*3, y, reference_sprite:getDimensions(), image:getDimensions())
+            local index = y / reference_height
+            facing_forward[index] = quad_forward
+            facing_backward[index] = quad_backward
+            facing_right[index] = quad_right
+            facing_left[index] = quad_left
+        end
+
+        animation_counter = 1
+    }
 
     self.max_health = 5
     self.current_health = self.max_health
@@ -30,6 +50,10 @@ function Player:update(dt)
     if check_collision(self, Coin) then
         Coin:on_collect(self)
     end
+end
+
+function Player:draw()
+    
 end
 
 function Player:check_out_of_bounds()
