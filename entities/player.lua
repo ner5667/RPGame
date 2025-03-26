@@ -5,7 +5,8 @@ Player = Entity.new(0, 0, nil)
 function Player:load()
 
     local reference_sprite = love.graphics.newImage("assets/Player/Player_sprite_1.png")
-    local reference_width, reference_height = reference_sprite:getDimensions()
+    local reference_width = reference_sprite:getWidth()
+    local reference_height = reference_sprite:getHeight()
 
 
     local image = love.graphics.newImage("assets/Player/Player_sprite_map.png")
@@ -16,13 +17,12 @@ function Player:load()
     self.facing_left = {}
 
     local index = 1
-    for y = 0, image:getHeight(), reference_height do
-        
+    for y = 0, image:getHeight() - 1, reference_height do
+
         local quad_forward = love.graphics.newQuad(0, y, reference_width, reference_height, image:getDimensions())
         local quad_backward = love.graphics.newQuad(reference_width, y, reference_width, reference_height, image:getDimensions())
         local quad_right = love.graphics.newQuad(reference_width*2, y, reference_width, reference_height, image:getDimensions())
         local quad_left = love.graphics.newQuad(reference_width*3, y, reference_width, reference_height, image:getDimensions())
-        local index = y / reference_height
         self.facing_forward[index] = quad_forward
         self.facing_backward[index] = quad_backward
         self.facing_right[index] = quad_right
@@ -58,14 +58,18 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    self.sprite_batch:clear()
+    self:choose_animation()
+
     self.sprite_batch:add(self.sprite)
     love.graphics.draw(self.sprite_batch, self.x_position, self.y_position)
-    self.animation_counter = self.animation_counter + 1
+    self.sprite_batch:clear()
+
+
+    --self.animation_counter = self.animation_counter + 1
     if self.animation_counter  > #self.animation_used then
         self.animation_counter = 1
+    
     end
-    Player:choose_animation()
 end
 
 function Player:check_out_of_bounds()
@@ -109,8 +113,6 @@ function Player:move(dt)
         adjusted_speed = adjusted_speed / 1.4
     end
 
-
-
     self.x_position = self.x_position + self.movement_vector.horizontal * adjusted_speed * dt
     self.y_position = self.y_position + self.movement_vector.vertical * adjusted_speed * dt
 
@@ -121,17 +123,16 @@ end
 
 
 function Player:choose_animation()
-    if self.current_animation == 1 then
-        self.animation_used = self.facing_forward
-    elseif self.current_animation == 2 then
-        self.animation_used = self.facing_backward
-    elseif self.current_animation == 3 then
+    if self.movement_vector.vertical == 1 then
         self.animation_used = self.facing_right
-    elseif self.current_animation == 4 then
+    elseif self.movement_vector.vertical == -1 then
         self.animation_used = self.facing_left
-    else
+    elseif self.movement_vector.horizontal == 1 then
         self.animation_used = self.facing_forward
+    elseif self.movement_vector.horizontal == -1 then
+        self.animation_used = self.facing_backward
     end
+
     self.sprite = self.animation_used[self.animation_counter]
 end
 
